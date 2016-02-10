@@ -333,6 +333,8 @@ class FormFactory(object):
                     choices=datasource.metrics_combo),
             'url': TextField(
                 'URL', default='www.airbnb.com',),
+            'username': TextField(
+                'User Name', default='bob',),
             'where': TextField(
                 'Custom WHERE clause', default='',
                 description=(

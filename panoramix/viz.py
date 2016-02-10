@@ -1152,6 +1152,17 @@ class IFrameViz(BaseViz):
         'fields': ('url',)
     },)
 
+class HelloWorld(BaseViz):
+    viz_type = "helloworld"
+    verbose_name = "Hello World"
+    is_timeseries = False
+    js_files = ['widgets/viz_helloworld.js']
+    fieldsets = (
+    {
+        'label': None,
+        'fields': ('username',)
+    },)
+
 
 class ParallelCoordinatesViz(BaseViz):
     viz_type = "para"
@@ -1275,6 +1286,7 @@ viz_types_list = [
     IFrameViz,
     ParallelCoordinatesViz,
     HeatmapViz,
+    HelloWorld,
 ]
 
 viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list])
