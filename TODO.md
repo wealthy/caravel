@@ -37,6 +37,8 @@ List of TODO items for Dashed
 
 
 ## Easy-ish fix
+* Showing caching information in Dashboard view
+* Kill switch for Druid in docs
 * CREATE VIEW button from SQL editor
 * Test button for when editing SQL expression
 * Slider form element

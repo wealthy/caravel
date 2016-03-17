@@ -169,16 +169,52 @@ var px = (function () {
         }
         return qrystr;
       },
+      widgetHeader: function () {
+        return this.container.parents("li.widget").find(".chart-header");
+      },
       jsonEndpoint: function () {
         var parser = document.createElement('a');
         parser.href = data.json_endpoint;
-        var endpoint = parser.pathname + this.querystring() + "&json=true";
+        var endpoint = parser.pathname + this.querystring();
+        endpoint += "&json=true";
+        endpoint += "&force=" + this.force;
         return endpoint;
       },
       done: function (data) {
         clearInterval(timer);
         token.find("img.loading").hide();
         container.show();
+
+        var cachedSelector = null;
+        if (dashboard === undefined) {
+          cachedSelector = $('#is_cached');
+          if (data !== undefined && data.is_cached) {
+            cachedSelector
+              .click(function () {
+                slice.render(true);
+              })
+              .attr('title', 'Served from data cached at ' + data.cached_dttm + '. Click to force-refresh')
+              .show()
+              .tooltip('fixTitle');
+          } else {
+            cachedSelector.hide();
+          }
+        } else {
+          var refresh = this.widgetHeader().find('.refresh');
+          if (data !== undefined && data.is_cached) {
+            refresh.css('color', 'red')
+            .attr(
+              'title',
+              'Served from data cached at ' + data.cached_dttm + '. Click to force-refresh')
+            .tooltip('fixTitle');
+          } else {
+            refresh.css('color', "")
+            .attr(
+              'title',
+              'Click to force-refresh')
+            .tooltip('fixTitle');
+          }
+        }
         if (data !== undefined) {
           $("#query_container").html(data.query);
         }
@@ -194,7 +230,8 @@ var px = (function () {
         $('#csv').click(function () {
           window.location = data.csv_endpoint;
         });
-        $('.btn-group.results span').removeAttr('disabled');
+        $('.btn-group.results span,a').removeAttr('disabled');
+        $('.query-and-save button').removeAttr('disabled');
         always(data);
       },
       error: function (msg) {
@@ -204,6 +241,8 @@ var px = (function () {
         container.show();
         $('span.query').removeClass('disabled');
         $('#timer').addClass('btn-danger');
+        $('.btn-group.results span,a').removeAttr('disabled');
+        $('.query-and-save button').removeAttr('disabled');
         always(data);
       },
       width: function () {
@@ -228,8 +267,11 @@ var px = (function () {
           }, 500);
         });
       },
-      render: function () {
-        $('.btn-group.results span').attr('disabled', 'disabled');
+      render: function (force) {
+        if (force === undefined) {
+          force = false;
+        }
+        this.force = force;
         token.find("img.loading").show();
         container.hide();
         container.html('');
