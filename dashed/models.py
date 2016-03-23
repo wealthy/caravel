@@ -924,6 +924,9 @@ class DruidDatasource(Model, AuditMixinNullable, Queryable):
                 granularity).total_seconds() * 1000
         if not isinstance(granularity, string_types):
             granularity = {"type": "duration", "duration": granularity}
+            origin = extras.get('druid_time_origin')
+            if origin:
+                granularity['origin'] = origin
 
         qry = dict(
             datasource=self.datasource_name,
