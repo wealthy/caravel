@@ -52,7 +52,7 @@ class LiveTest(TestCase):
             if failed:
                 raise Exception("Failed a doctest")
 
-    def misc(self):
+    def test_misc(self):
         self.client.get('/health')
         self.client.get('/ping')
 
