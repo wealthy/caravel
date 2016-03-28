@@ -52,9 +52,9 @@ class LiveTest(TestCase):
             if failed:
                 raise Exception("Failed a doctest")
 
-    def misc(self):
-        self.client.get('/health')
-        self.client.get('/ping')
+    def test_misc(self):
+        assert self.client.get('/health').data == "OK"
+        assert self.client.get('/ping').data == "OK"
 
     def tearDown(self):
         pass
